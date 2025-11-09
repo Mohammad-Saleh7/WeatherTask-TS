@@ -1,0 +1,79 @@
+{
+  "loading": "loading...",
+  "app": { "title": "Weather Dashboard" },
+  "header": {
+    "language": "Language",
+    "mode": "Mode",
+    "search": "Search Your Location",
+    "exit": "Exit",
+    "english": "En",
+    "persian": "FA",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "login": {
+    "title": "Login",
+    "label": "Enter Your Name",
+    "submit": "Login"
+  },
+  "errors": {
+    "required": "Please enter your username",
+    "minLength": "Your input should be more than 2 characters",
+    "maxLength": "Your input should be less than 31 characters",
+    "cityNotFound": "City not found❗",
+    "forecast2wFail": "Couldn't fetch 2 weeks forecast.",
+    "monthlyFail": "Couldn't fetch monthly temperature data.",
+    "network": "Network error. Please check your connection.",
+    "server": "Server error. Please try again.",
+    "unknown": "Something went wrong."
+  },
+  "toast": {
+    "welcome": "Welcome {{name}} ✅",
+    "pleaseEnter": "Please enter your username❗"
+  },
+  "weather": {
+    "avgMonthly": "Average Monthly Temperature",
+    "feelsLike": "Feels Like",
+    "high": "High",
+    "low": "Low"
+  },
+  "months": {
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "Mar",
+    "apr": "Apr",
+    "may": "May",
+    "jun": "Jun",
+    "jul": "Jul",
+    "aug": "Aug",
+    "sep": "Sep",
+    "oct": "Oct",
+    "nov": "Nov",
+    "dec": "Dec"
+  },
+  "forecast": {
+    "title2w": "2 Weeks Forecast",
+    "empty": "Forecast data is not available.",
+    "today": "Today"
+  },
+  "wmo": {
+    "0": "Clear sky",
+    "1": "Mainly clear",
+    "2": "Partly cloudy",
+    "3": "Overcast",
+    "45": "Fog",
+    "48": "Fog",
+    "51": "Drizzle",
+    "61": "Rain",
+    "63": "Moderate rain",
+    "65": "Heavy rain",
+    "71": "Snow",
+    "80": "Rain showers",
+    "95": "Thunderstorm",
+    "unknown": "Unknown"
+  },
+  "footer": {
+    "rights": "All rights of this site are reserved for Nadin Sadr Aria Engineering Company",
+    "contact": "Contact Us : info@nadin.ir"
+  }
+}
