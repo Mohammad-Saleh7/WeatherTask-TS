@@ -41,6 +41,7 @@ const NavComponent: React.FC<NavComponentProps> = ({ setCity }) => {
   const handleSearch = (): void => {
     if (!input.trim()) return;
     setCity(input.trim());
+    setInput("");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

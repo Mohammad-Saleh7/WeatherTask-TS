@@ -4,6 +4,7 @@ import WeatherMain from "../components/WeatherMain";
 import NavComponent from "../components/NavComponent";
 import Footer from "../components/Footer";
 import { useTranslation } from "react-i18next";
+
 import {
   getWeatherByCity,
   getTwoWeeksForecast,
