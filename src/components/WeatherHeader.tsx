@@ -75,6 +75,13 @@ const WeatherHeader: React.FC<WeatherHeaderProps> = ({
           .join(" ")
       : "";
 
+  const gradient = (
+    <linearGradient id="myGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor="#4CDFE80D" />
+      <stop offset="100%" stopColor="#7947F70D" />
+    </linearGradient>
+  );
+
   useEffect(() => {
     const time = setTimeout(() => {
       setLoading(false);
@@ -228,6 +235,7 @@ const WeatherHeader: React.FC<WeatherHeaderProps> = ({
                   viewBox={`0 0 ${w} ${h}`}
                   preserveAspectRatio="none"
                 >
+                  <defs>{gradient}</defs>
                   {[0.2, 0.4, 0.6, 0.8].map((p) => (
                     <line
                       key={p}
@@ -237,36 +245,19 @@ const WeatherHeader: React.FC<WeatherHeaderProps> = ({
                       y2={p * h}
                       stroke="currentColor"
                       strokeDasharray="4 6"
-                      // opacity="0.25"
+                      opacity="0.5"
                     />
                   ))}
 
                   {points && (
                     <polyline
                       points={points}
-                      fill="none"
+                      fill="url(#myGradient)"
                       stroke="currentColor"
                       strokeWidth={2}
                       opacity={0.9}
                     />
                   )}
-
-                  {months.map((m, i) => {
-                    const x = pad + i * step;
-                    const y =
-                      m.avgTemp != null
-                        ? pad + normY(m.avgTemp) * (h - 2 * pad)
-                        : h / 2;
-                    return (
-                      <circle
-                        key={m.month || i}
-                        cx={x}
-                        cy={y}
-                        r={3}
-                        fill="currentColor"
-                      />
-                    );
-                  })}
                 </svg>
 
                 <Box
