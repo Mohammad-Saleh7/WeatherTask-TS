@@ -228,7 +228,7 @@ const WeatherHeader: React.FC<WeatherHeaderProps> = ({
                   viewBox={`0 0 ${w} ${h}`}
                   preserveAspectRatio="none"
                 >
-                  {[0.25, 0.5, 0.75].map((p) => (
+                  {[0.2, 0.4, 0.6, 0.8].map((p) => (
                     <line
                       key={p}
                       x1={0}
@@ -273,11 +273,42 @@ const WeatherHeader: React.FC<WeatherHeaderProps> = ({
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
+                    flexWrap: "wrap",
                     mt: 0.5,
                   }}
                 >
                   <Typography variant="caption">
                     {months[0]?.label || t("months.jan")}
+                  </Typography>
+                  <Typography variant="caption">
+                    {months[1]?.label || t("months.feb")}
+                  </Typography>
+                  <Typography variant="caption">
+                    {months[2]?.label || t("months.mar")}
+                  </Typography>
+                  <Typography variant="caption">
+                    {months[3]?.label || t("months.apr")}
+                  </Typography>
+                  <Typography variant="caption">
+                    {months[4]?.label || t("months.may")}
+                  </Typography>
+                  <Typography variant="caption">
+                    {months[5]?.label || t("months.jun")}
+                  </Typography>
+                  <Typography variant="caption">
+                    {months[6]?.label || t("months.jul")}
+                  </Typography>
+                  <Typography variant="caption">
+                    {months[7]?.label || t("months.aug")}
+                  </Typography>
+                  <Typography variant="caption">
+                    {months[8]?.label || t("months.sep")}
+                  </Typography>
+                  <Typography variant="caption">
+                    {months[9]?.label || t("months.oct")}
+                  </Typography>
+                  <Typography variant="caption">
+                    {months[10]?.label || t("months.nov")}
                   </Typography>
                   <Typography variant="caption">
                     {months[11]?.label || t("months.dec")}
