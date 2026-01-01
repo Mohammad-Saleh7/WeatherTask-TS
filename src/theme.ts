@@ -12,6 +12,7 @@ const theme = createTheme({
         },
         navbar: {
           default: "#f3fafe",
+          dNav: "#f3fafe",
         },
         text: {
           primary: "#003464",
@@ -27,6 +28,7 @@ const theme = createTheme({
           darkPaper: "#292f45",
         },
         navbar: {
+          default: "#151d32",
           dNav: "#151d32",
         },
       },

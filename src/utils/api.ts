@@ -29,7 +29,18 @@ export type MonthlyPoint = {
   avgTemp: number | null;
 };
 
-const API_KEY = import.meta.env.VITE_WEATHER_KEY as string;
+// ---------- helpers ----------
+const isNumber = (v: unknown): v is number =>
+  typeof v === "number" && !Number.isNaN(v);
+
+function getWeatherApiKey(): string {
+  const key = import.meta.env.VITE_WEATHER_KEY as string | undefined;
+  if (!key) {
+    // این ارور کمک می‌کنه توی Netlify بفهمی env رو نذاشتی
+    throw new Error("Missing VITE_WEATHER_KEY (OpenWeather API key)");
+  }
+  return key;
+}
 
 const owApi = axios.create({
   baseURL: "https://api.openweathermap.org/data/2.5",
@@ -38,6 +49,8 @@ const owApi = axios.create({
 
 export async function getWeatherByCity(cityName: string): Promise<Weather> {
   try {
+    const API_KEY = getWeatherApiKey();
+
     const { data } = await owApi.get<{
       name: string;
       timezone: number;
@@ -58,15 +71,16 @@ export async function getWeatherByCity(cityName: string): Promise<Weather> {
       },
     });
 
+    const icon = data.weather?.[0]?.icon ?? "01d";
+    const desc = data.weather?.[0]?.description ?? "Unknown";
+
     return {
       cityName: data.name,
       Temperature: `${Math.round(data.main.temp)}°C`,
       high: Math.round(data.main.temp_max),
       low: Math.round(data.main.temp_min),
-      Status: data.weather?.[0]?.description ?? "Unknown",
-      img: `https://openweathermap.org/img/wn/${
-        data.weather?.[0]?.icon ?? "01d"
-      }@2x.png`,
+      Status: desc,
+      img: `https://openweathermap.org/img/wn/${icon}@2x.png`,
       tzOffsetSec: data.timezone,
       feelsLike: Math.round(data.main.feels_like),
       coord: data.coord,
@@ -120,13 +134,23 @@ export async function getTwoWeeksForecast(
 
     const L = i18n.language === "fa" ? "fa-IR" : "en-US";
 
-    return data.daily.time.map<ForecastItem>((iso, i) => {
-      const code = data.daily.weathercode[i];
+    const times = data?.daily?.time ?? [];
+    const tmax = data?.daily?.temperature_2m_max ?? [];
+    const codes = data?.daily?.weathercode ?? [];
+
+    // اگه هرکدوم خالی بود، خروجی خالی بده (یا می‌تونی throw کنی)
+    if (!times.length) return [];
+
+    return times.map<ForecastItem>((iso, i) => {
+      const code = codes[i] ?? -1;
       const d = new Date(iso);
+
+      const maxTemp = isNumber(tmax[i]) ? Math.round(tmax[i]) : 0;
+
       return {
         date: iso,
         weekday: d.toLocaleDateString(L, { weekday: "short" }),
-        maxTemp: Math.round(data.daily.temperature_2m_max[i]),
+        maxTemp,
         weather: i18n.t(`wmo.${code}`, { defaultValue: i18n.t("wmo.unknown") }),
         icon: iconMap[code] ?? "❔",
       };
@@ -149,9 +173,9 @@ export async function getMonthlyWeather(
     const { data } = await archiveApi.get<{
       daily?: {
         time?: string[];
-        temperature_2m_mean?: (number | null)[];
-        temperature_2m_max?: (number | null)[];
-        temperature_2m_min?: (number | null)[];
+        temperature_2m_mean?: Array<number | null>;
+        temperature_2m_max?: Array<number | null>;
+        temperature_2m_min?: Array<number | null>;
       };
     }>("", {
       params: {
@@ -170,30 +194,47 @@ export async function getMonthlyWeather(
     const tMax = data?.daily?.temperature_2m_max ?? [];
     const tMin = data?.daily?.temperature_2m_min ?? [];
 
-    if (!days.length) throw new Error();
+    if (!days.length) throw new Error("No archive data");
 
     const agg = Array.from({ length: 12 }, () => ({ sum: 0, n: 0 }));
 
     for (let i = 0; i < days.length; i++) {
-      const m = new Date(days[i]).getMonth();
-      const v =
-        typeof tMean[i] === "number"
-          ? tMean[i]
-          : typeof tMax[i] === "number" && typeof tMin[i] === "number"
-          ? (tMax[i] + tMin[i]) / 2
-          : null;
+      const day = days[i];
+      const dt = new Date(day);
+      if (Number.isNaN(dt.getTime())) continue;
+
+      const monthIndex = dt.getMonth(); // 0..11
+
+      const mean = tMean[i];
+      const max = tMax[i];
+      const min = tMin[i];
+
+      let v: number | null = null;
+
+      if (isNumber(mean)) {
+        v = mean;
+      } else if (isNumber(max) && isNumber(min)) {
+        v = (max + min) / 2;
+      }
 
       if (v != null && !Number.isNaN(v)) {
-        agg[m].sum += v;
-        agg[m].n += 1;
+        agg[monthIndex].sum += v;
+        agg[monthIndex].n += 1;
       }
     }
 
-    return agg.map<MonthlyPoint>((m, i) => ({
-      month: `2024-${String(i + 1).padStart(2, "0")}`,
-      label: null,
-      avgTemp: m.n ? Math.round(m.sum / m.n) : null,
-    }));
+    // (اختیاری) اگر خواستی label فارسی/انگلیسی ماه‌ها رو هم بسازی:
+    // const L = i18n.language === "fa" ? "fa-IR" : "en-US";
+
+    return agg.map<MonthlyPoint>((m, i) => {
+      const month = `2024-${String(i + 1).padStart(2, "0")}`;
+
+      return {
+        month,
+        label: null,
+        avgTemp: m.n ? Math.round(m.sum / m.n) : null,
+      };
+    });
   } catch {
     throw new Error(i18n.t("errors.monthlyFail"));
   }
