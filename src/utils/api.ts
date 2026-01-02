@@ -36,7 +36,6 @@ const isNumber = (v: unknown): v is number =>
 function getWeatherApiKey(): string {
   const key = import.meta.env.VITE_WEATHER_KEY as string | undefined;
   if (!key) {
-    // این ارور کمک می‌کنه توی Netlify بفهمی env رو نذاشتی
     throw new Error("Missing VITE_WEATHER_KEY (OpenWeather API key)");
   }
   return key;
@@ -138,7 +137,6 @@ export async function getTwoWeeksForecast(
     const tmax = data?.daily?.temperature_2m_max ?? [];
     const codes = data?.daily?.weathercode ?? [];
 
-    // اگه هرکدوم خالی بود، خروجی خالی بده (یا می‌تونی throw کنی)
     if (!times.length) return [];
 
     return times.map<ForecastItem>((iso, i) => {
@@ -222,9 +220,6 @@ export async function getMonthlyWeather(
         agg[monthIndex].n += 1;
       }
     }
-
-    // (اختیاری) اگر خواستی label فارسی/انگلیسی ماه‌ها رو هم بسازی:
-    // const L = i18n.language === "fa" ? "fa-IR" : "en-US";
 
     return agg.map<MonthlyPoint>((m, i) => {
       const month = `2024-${String(i + 1).padStart(2, "0")}`;
