@@ -54,11 +54,6 @@ const Footer: React.FC<FooterProps> = () => {
             minWidth: 240,
           }}
         >
-          <img
-            src="/footer.png"
-            alt="footer"
-            style={{ width: 44, height: 44 }}
-          />
           <Typography sx={{ fontSize: { xs: 12.5, sm: 13.5 } }}>
             {t("footer.rights")}
           </Typography>
@@ -73,7 +68,7 @@ const Footer: React.FC<FooterProps> = () => {
           }}
         >
           <Link
-            href="mailto:info@nadin.ir"
+            href="mailto:abbasisaleh895@gmail.com"
             sx={(theme) => ({
               textDecoration: "none",
               display: "flex",

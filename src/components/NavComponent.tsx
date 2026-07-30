@@ -81,7 +81,7 @@ const NavComponent: React.FC<NavComponentProps> = ({ setCity }) => {
             <img
               src="/nav.png"
               alt="nav"
-              style={{ height: 44, width: 44, borderRadius: "100%" }}
+              style={{ height: 65, width: 65, borderRadius: "100%" }}
             />
             <Typography
               variant="body1"
